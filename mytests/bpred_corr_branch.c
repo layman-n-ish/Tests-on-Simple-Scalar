@@ -1,3 +1,10 @@
+/* 
+* Executing correlated branch conditionals with random pattern.
+*
+* Author: Nishant Malpani (Nishant.Malpani@iiitb.org)
+*
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,7 +17,7 @@ int main()
         int i, a;
         srand(SEED);
 
-	printf("Running script %s...\n", __FILE__);
+	printf("Running test %s...\n", __FILE__);
 
         a = 0;
         for(i = 0; i < 10000; i++) {

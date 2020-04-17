@@ -7,14 +7,19 @@
 
 #include <stdio.h>
 
+#define N 1000
+#define M 1000
+
 int main()
 {
         int i, j;
-        int array[1000][1000] = {0}; 
+        int matrix[N][M] = {0}; 
 
-        for(i = 0; i < 1000; i++) {
-                for(j = 0; j < 1000; j++) {
-                        array[i][j] = 1;
+        printf("Running test %s...\n", __FILE__);
+
+        for(i = 0; i < N; i++) {
+                for(j = 0; j < M; j++) {
+                        matrix[i][j] = 1;
                 }
         }
 
