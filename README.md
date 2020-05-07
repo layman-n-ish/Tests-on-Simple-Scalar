@@ -1,7 +1,5 @@
 # Tests-on-Simple-Scalar
 
-**[WIP]**
-
 In the words of the creators, *"The SimpleScalar tool set is a system software infrastructure used to build modeling applications for program performance analysis, detailed microarchitectural modeling, and hardware-software co-verification"*. An architectural simulator reproduces the behaviour of a computing device. With SimpleScalar, one can simulate programs on various configurations of modern processors, even Out-of-Order (OoO) issue processors, that support non-blocking caches, speculative execution, and state-of-the-art branch prediction. Visit [SimpleScalar](http://www.simplescalar.com/)'s 'Downloads' section to download the tool or the 'Documentation' section to learn about the internals and execution steps.
 
 ## Setup
@@ -76,9 +74,26 @@ Extracting vital branch prediction results from the simulator runs...
 
 ## Experiments
 
+#### Branch Predictors 
+
+A hypothesis I wanted to prove was how dynamic global predictors should outperform dynamic local predictors on [correlated branch conditionals with a *random* pattern](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/blob/master/mytests/bpred_corr_branch.c); randomness was embedded because only then one can point out the exploitation, by the global predictor, of the auxiliary information about other branch conditionals that global branch history possesses, instead of simply "learning" the pattern itself. This global view lacks in the local predictors ergo their failure in comparison with global predictors. 
+
+For this experiment, I configured various branch predictors ([`myconfig/bpred_*`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/tree/master/myconfig)) viz. two-level adaptive (and its numerous flavours: GAg, PAg, PAp, gshare), bimodal, hybrid between two-level adaptive and bimodal (named 'comb'), taken, not-taken, etc. Each of these branch predictors were employed sequentially while executing `mytests/bpred_corr_branch.c` which contains the source code for 'executing correlated branch conditionals with random pattern'. 
+
+#### Caches
+
+< About Cache-oblivious algorithms >
+
 ## Results and observations
 
-## Todo
 
-- Detailed description of carrying out analysis.
-- Complete and append results of cache-aware algos.
+
+#### Branch Predictors 
+
+
+
+#### Caches
+
+
+
+## Future Work
