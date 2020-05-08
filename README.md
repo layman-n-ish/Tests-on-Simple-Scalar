@@ -78,7 +78,7 @@ Extracting vital branch prediction results from the simulator runs...
 
 A hypothesis I wanted to prove was how dynamic global predictors should outperform dynamic local predictors on [correlated branch conditionals with a *random* pattern](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/blob/master/mytests/bpred_corr_branch.c); randomness was embedded because only then one can point out the exploitation, by the global predictor, of the auxiliary information about other branch conditionals that global branch history possesses, instead of simply "learning" the pattern itself. This global view lacks in the local predictors ergo their failure in comparison with global predictors. 
 
-For this experiment, I configured various branch predictors ([`myconfig/bpred_*`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/tree/master/myconfig)) viz. two-level adaptive (and its numerous flavours: GAg, PAg, PAp, gshare), bimodal, hybrid between two-level adaptive and bimodal (named 'comb'), taken, not-taken, etc. Each of these branch predictors were employed sequentially while executing `mytests/bpred_corr_branch.c` which contains the source code for 'executing correlated branch conditionals with random pattern'. 
+For this experiment, I configured various branch predictors ([`myconfig/bpred_*`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/tree/master/myconfig)) viz. two-level adaptive (and its numerous flavours: GAg, PAg, PAp, gshare), bimodal, hybrid between two-level adaptive and bimodal (named 'comb'), taken, not-taken, etc. Each of these branch predictors were employed sequentially while executing `mytests/bpred_corr_branch.c` which contains the source code for 'executing correlated branch conditionals with random pattern'. Further experiments include modifying parameters of the branch predictor such as history length, table size, etc.  
 
 #### Caches
 
@@ -86,11 +86,73 @@ For this experiment, I configured various branch predictors ([`myconfig/bpred_*`
 
 ## Results and observations
 
-
-
 #### Branch Predictors 
 
+Surprisingly, the results don't come out to be consistent with the hypotesis, which can be seen below. 
 
+```
+$ ./run_analysis.sh b mytests/bpred_corr_branch.o 1
+> [...]
+
+Extracting vital branch prediction results from the simulator runs...
+
+        Saving bpred:2lev-GAg's results...
+        Printing bpred:2lev-GAg's metrics:
+                bpred_2lev.bpred_addr_rate    0.8181 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_2lev.bpred_dir_rate    0.8227 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_2lev.bpred_jr_rate    0.9534 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+
+        Saving bpred:2lev-gshare's results...
+        Printing bpred:2lev-gshare's metrics:
+                bpred_2lev.bpred_addr_rate    0.9055 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_2lev.bpred_dir_rate    0.9096 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_2lev.bpred_jr_rate    0.9598 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+
+        Saving bpred:2lev-PAg's results...
+        Printing bpred:2lev-PAg's metrics:
+                bpred_2lev.bpred_addr_rate    0.9471 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_2lev.bpred_dir_rate    0.9506 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_2lev.bpred_jr_rate    0.9652 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+
+        Saving bpred:2lev-PAp-concat's results...
+        Printing bpred:2lev-PAp-concat's metrics:
+                bpred_2lev.bpred_addr_rate    0.9371 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_2lev.bpred_dir_rate    0.9388 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_2lev.bpred_jr_rate    0.9850 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+
+        Saving bpred:2lev-PAp-xor's results...
+        Printing bpred:2lev-PAp-xor's metrics:
+                bpred_2lev.bpred_addr_rate    0.9610 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_2lev.bpred_dir_rate    0.9630 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_2lev.bpred_jr_rate    0.9818 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+
+        Saving bpred:bimod's results...
+        Printing bpred:bimod's metrics:
+                bpred_bimod.bpred_addr_rate    0.9313 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_bimod.bpred_dir_rate    0.9357 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_bimod.bpred_jr_rate    0.9558 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+        Saving bpred:comb's results...
+        Printing bpred:comb's metrics:
+                bpred_comb.bpred_addr_rate    0.9621 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_comb.bpred_dir_rate    0.9651 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_comb.bpred_jr_rate    0.9705 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+
+        Saving bpred:nottaken's results...
+        Printing bpred:nottaken's metrics:
+                bpred_nottaken.bpred_addr_rate    0.3425 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_nottaken.bpred_dir_rate    0.3425 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_nottaken.bpred_jr_rate    0.0000 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)
+
+        Saving bpred:taken's results...
+        Printing bpred:taken's metrics:
+                bpred_taken.bpred_addr_rate    0.3425 # branch address-prediction rate (i.e., addr-hits/updates)
+                bpred_taken.bpred_dir_rate    0.3425 # branch direction-prediction rate (i.e., all-hits/updates)
+                bpred_taken.bpred_jr_rate    0.0000 # JR address-prediction rate (i.e., JR addr-hits/JRs seen)             
+```            
+
+One would expect the global predictors such as gshare & GAg to produce better direction-prediction rate than the local predictors (PAp, PAg, etc.). I've been debugging the obscruity behind the results and shall update here soon.
+
+Complete simulation results can be found under [`results/result_bpred_*`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/tree/master/results). 
 
 #### Caches
 
