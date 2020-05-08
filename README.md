@@ -38,7 +38,7 @@ Run the `run_analysis.sh` bash script to automate the task of running my designe
 ```
 Usage: ./run_analysis.sh [ANALYSIS_TYPE] [TEST_FILE_PATH] [DEBUG]
 ```
-- `ANALYSIS_TYPE` can be 'b' for running branch predictors' test or 'c' for executing analysis on cache-aware algorithms.
+- `ANALYSIS_TYPE` can be 'b' for running branch predictors' test or 'c' for executing analysis on cache-oblivious algorithms.
 - `TEST_FILE_PATH` takes in the path to the executable to run the `sim-outorder` simulator on.
 - `DEBUG` only when '1' prints useful stats and messages about the running tests.
 
@@ -82,7 +82,9 @@ For this experiment, I configured various branch predictors ([`myconfig/bpred_*`
 
 #### Caches
 
-< About Cache-oblivious algorithms >
+[Cache-oblivious algorithms](https://en.wikipedia.org/wiki/Cache-oblivious_algorithm), which are subtly different from Cache-aware algorithms as Michael Bender explains in his brief technical paper [Cache-Oblivious and Cache-Aware Algorithms](https://www.tau.ac.il/~stoledo/csc04/Bender.pdf), are algorithms written craftily to exploit how caches work and their structure in order to attain superior asymptotic time complexity. As the name suggests, these algorithms are *oblivious* to the memory heirarchy and ergo are anticipated to work flawlessly even on machines with different cache levels, cache line size, etc. than the machine on which such algorithms were tested on. 
+
+Accessing elements of a martrix in [row-major order](https://en.wikipedia.org/wiki/File:Row_and_column_major_order.svg) is one such cache-oblivious algorithm. Simply because how arrays are stored in memory and how caches fetch blocks of sequential localized data from memory during a cache-miss, accessing elements from a matrix in row-major order ([`mytests/caching_row_major.c`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/blob/master/mytests/caching_row_major.c)) looks advantageous than accessing elements in column-major order ([`mytests/caching_col_major.c`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/blob/master/mytests/caching_col_major.c)) because every access results in a cache-miss in the latter case as it fetches the incorrect block in the top-level cache (assuming cache pre-fetchers are absent).
 
 ## Results and observations
 
@@ -156,6 +158,6 @@ Complete simulation results can be found under [`results/result_bpred_*`](https:
 
 #### Caches
 
-
+< Attach results >
 
 ## Future Work
