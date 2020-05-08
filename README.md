@@ -154,7 +154,7 @@ Extracting vital branch prediction results from the simulator runs...
 
 One would expect the global predictors such as gshare & GAg to produce better direction-prediction rate than the local predictors (PAp, PAg, etc.). I've been debugging the obscruity behind the results and shall update here soon.
 
-Complete simulation results can be found under [`results/result_bpred_*`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/tree/master/results). 
+Relevant simulation results can be found under [`results/result_bpred_*`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/tree/master/results). Complete simulation results can be found under [`output-sim/test_bpred_*`](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/tree/master/output-sim).
 
 #### Caches
 
