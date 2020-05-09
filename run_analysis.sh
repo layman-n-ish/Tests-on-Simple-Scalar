@@ -20,7 +20,7 @@ if [ ! -d $CONFIGS_DIR ]; then
 	exit 1
 fi
 
-if [ ! -e $TEST_FILE ]; then
+if [ ! -e $TEST_FILE ] && [ $SIM_TYPE == 'b' ]; then
 	echo "Missing test file to run analysis on!"
 	exit 1
 fi
@@ -65,6 +65,30 @@ if [ $SIM_TYPE == 'b' ] || [ $SIM_TYPE == 'a' ]; then
 			echo -e "\t\t$(sed -n '/bpred_addr_rate/ p' $test_bpred_path)"
 			echo -e "\t\t$(sed -n '/bpred_dir_rate/ p' $test_bpred_path)"
 			echo -e "\t\t$(sed -n '/bpred_jr_rate/ p' $test_bpred_path)"
+			echo
+		fi
+	done
+fi
+
+if [ $SIM_TYPE == 'c' ] || [ $SIM_TYPE == 'a' ]; then
+	echo; echo "Executing analysis on cache-oblivious algorithms"; echo
+	./sim-outorder -config myconfig/caching_row.cfg mytests/caching_row_major.o
+	./sim-outorder -config myconfig/caching_col.cfg mytests/caching_col_major.o
+
+	echo; echo "Extracting vital cache stats from the simulator runs..."; echo
+	types=(row col)
+	for access_type in "${types[@]}"; do
+		echo -e "\tSaving cache_${access_type}'s results..."
+		sim_output_path=${SIM_DIR}/test_cache_${access_type}
+		sed -n -e '139,142p' -e '146,148p' -e '189,238p' $sim_output_path > ${RESULTS_DIR}/result_caching_${access_type}
+		
+		if [ $DEBUG -eq 1 ]; then
+			echo -e "\tPrinting cache:${access_type}'s metrics:";
+			echo -e "\t\t$(sed -n '/sim_elapsed_time/ p' $sim_output_path)"
+			echo -e "\t\t$(sed -n '/sim_cycle/ p' $sim_output_path)"
+			echo -e "\t\t$(sed -n '/sim_IPC/ p' $sim_output_path)"
+			echo -e "\t\t$(sed -n '/dl1.miss_rate/ p' $sim_output_path)"
+			echo -e "\t\t$(sed -n '/ul2.miss_rate/ p' $sim_output_path)"
 			echo
 		fi
 	done
