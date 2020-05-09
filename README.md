@@ -31,9 +31,11 @@ To be able to execute our own binaries on the simulators, one has to employ a cr
 bin/sslittle-na-sstrix-gcc -g -O -o mytests/bpred_corr_branch mytests/bpred_corr_branch.c
 ```
 
+For more information, see the attached [Makefile](https://github.com/layman-n-ish/Tests-on-Simple-Scalar/blob/master/Makefile).
+
 ## How to run tests
 
-Run the `run_analysis.sh` bash script to automate the task of running my designed tests on the `sim-outorder` simulator with PISA target.
+Once the project is built with my included tests (by executing my Makefile), run the `run_analysis.sh` bash script to automate the task of running my designed tests on the `sim-outorder` simulator with PISA target.
 
 ```
 Usage: ./run_analysis.sh [ANALYSIS_TYPE] [TEST_FILE_PATH] [DEBUG]
